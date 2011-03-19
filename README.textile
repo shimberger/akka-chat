@@ -1,0 +1,4 @@
+h1. Akka chat server
+
+This is just an experimental project which aims at creating an Akka/WebSocket based
+chat server. I am just trying to learn some Scala/Akka and new HTML stuff.
