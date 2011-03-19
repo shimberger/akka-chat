@@ -1,0 +1,12 @@
+
+#window {
+	border: 1px solid red;
+	height: 300px;
+	overflow: auto;
+}
+
+#message {
+	width: 95%;
+	display: block;
+	padding: 6px;
+}
