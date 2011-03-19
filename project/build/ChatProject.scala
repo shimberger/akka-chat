@@ -1,6 +1,6 @@
 import sbt._
 
-class CodeChestProject(info: ProjectInfo) extends DefaultProject(info) 
+class ChatProject(info: ProjectInfo) extends DefaultProject(info) 
   with AkkaProject
   {
 
