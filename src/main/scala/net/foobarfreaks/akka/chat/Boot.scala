@@ -9,18 +9,10 @@ class Boot {
   val factory = SupervisorFactory(
     SupervisorConfig(
       OneForOneStrategy(List(classOf[Exception]), 3, 100),
-        //
-        // in this particular case, just boot the built-in default root endpoint
-        //
       Supervise(
-        actorOf[RootEndpoint],
-        Permanent) ::
-      Supervise(
-        actorOf[WebActorManager],
+        actorOf[ChatNexus],
         Permanent) ::        
-      Supervise(
-        actorOf[SimpleAkkaAsyncHttpService],
-        Permanent)
-      :: Nil))
+        // More actors goe here	
+      Nil))
   factory.newInstance.start
 }

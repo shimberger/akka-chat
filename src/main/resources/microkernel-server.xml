@@ -69,34 +69,18 @@
 		<New id="Handlers" class="org.eclipse.jetty.server.handler.HandlerCollection">
 			<Set name="handlers">
 				<Array type="org.eclipse.jetty.server.Handler">
-					<!--
-						Item> <New id="AkkaRestHandler"
-						class="org.eclipse.jetty.servlet.ServletContextHandler"> <Set
-						name="contextPath">/</Set> <Call name="addServlet">
-						<Arg>akka.http.AkkaRestServlet</Arg> <Arg>/*</Arg> </Call> </New>
-						</Item
-					-->
 					<Item>
-						<New id="AkkaMistHandler" class="org.eclipse.jetty.servlet.ServletContextHandler">
-							<Set name="contextPath">/mist</Set>
-							<Call name="addServlet">
-								<Arg>akka.http.AkkaMistServlet</Arg>
-								<Arg>/*</Arg>
-							</Call>
-						</New>
-					</Item>
-					<Item>
-						<New id="AkkaMistHandler" class="org.eclipse.jetty.servlet.ServletContextHandler">
+						<New id="WebSocketHandler" class="org.eclipse.jetty.servlet.ServletContextHandler">
 							<Set name="contextPath">/ws</Set>
 							<Call name="addServlet">
-								<Arg>net.foobarfreaks.akka.chat.MessageServlet</Arg>
+								<Arg>net.foobarfreaks.akka.chat.WebSocketServlet</Arg>
 								<Arg>/*</Arg>
 							</Call>
 						</New>
 					</Item>					
 					<Item>
 						<New class="org.eclipse.jetty.server.handler.ContextHandler">
-							<Ref id="AkkaMistHandler">
+							<Ref id="WebSocketHandler">
 								<Call name="getClass">
 									<Call name="getClassLoader">
 										<Call name="getResource">
