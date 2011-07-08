@@ -2,6 +2,7 @@
 .project
 .classpath
 .settings
+.gradle
 project/boot/
 project/build/target/
 project/plugins/target/
@@ -9,6 +10,7 @@ project/plugins/lib_managed/
 project/plugins/src_managed/
 bin/
 target/
+build/
 lib_managed/
 src_managed/
 project/boot/

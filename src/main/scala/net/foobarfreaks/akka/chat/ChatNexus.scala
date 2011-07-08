@@ -4,7 +4,7 @@ import akka.actor._
 import akka.actor.Actor._
 import scala.collection.mutable._;
 
-class ChatNexus extends Actor with WebSocketNexus {
+class ChatNexus extends Actor with WebSocketNexus with Logging {
 
 		// Since this is never exposed it can be mutable
 		val clients = HashSet[ActorRef]()

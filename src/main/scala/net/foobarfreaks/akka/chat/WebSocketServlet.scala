@@ -4,7 +4,7 @@ import org.eclipse.jetty.websocket._
 import akka.actor._
 import akka.actor.Actor._
 import akka.util._
-import org.eclipse.jetty.websocket.WebSocket.Outbound
+import org.eclipse.jetty.websocket.WebSocket.Connection
 import javax.servlet.http._
 
 class WebSocketServlet extends org.eclipse.jetty.websocket.WebSocketServlet {
@@ -24,33 +24,34 @@ class WebSocketServlet extends org.eclipse.jetty.websocket.WebSocketServlet {
      * start an actor to send and receive messages on the sockets
      * behalf.
      */
-	class ProxyWebSocket(val uri : String) extends WebSocket with Logging {
+	class ProxyWebSocket(val uri : String) extends WebSocket.OnTextMessage with Logging {
 			
 			var proxy : ActorRef = null;
 		
-	        override def onConnect(outbound : Outbound) {
+	        override def onOpen(connection: Connection) {
 	        	log.debug("Client connected to WebSocket");
-	        	proxy = actorOf(new WebSocketProxy(uri,outbound)).start;
+	        	proxy = actorOf(new WebSocketProxy(uri,connection)).start;
 	        }
 	        
-	        override def onMessage(frame : Byte, data : Array[Byte],offset : Int, length : Int) {
+	        /*override def onMessage(frame : Byte, data : Array[Byte],offset : Int, length : Int) {
 	        	// We will ignore this so far, since it was
 	        	// done in the example too.
 	        }
+			*/
 	
-	        override def onMessage(frame : Byte, data : String) {
+	        override def onMessage(data : String) {
 	        	log.debug("Message received from WebSocket '" + data + "'");
 	        	proxy ! data;
 	        }
 		
-	        override def onDisconnect() {
+	        override def onClose(closeCode : Int, msg : String) {
 	        	log.debug("Client disconnected from WebSocket");
 	        	proxy.stop();
 	        }
 		
 	}
 	
-	class WebSocketProxy(val uri : String, val outbound : Outbound) extends Actor {
+	class WebSocketProxy(val uri : String, val connection : Connection) extends Actor with Logging {
 		
 		var nexusSeq : Seq[ActorRef] = null;
 		
@@ -66,7 +67,7 @@ class WebSocketServlet extends org.eclipse.jetty.websocket.WebSocketServlet {
 		def receive = {
 			case msg : ServerMessage => {
 				log.info("Received server message" + msg.data);
-				outbound.sendMessage(msg.data);
+				connection.sendMessage(msg.data);
 			}
 			case msg : String => {
 				log.info("Received client message" + msg);

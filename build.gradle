@@ -14,8 +14,8 @@ dependencies {
   scalaTools 'org.scala-lang:scala-library:2.9.0'
   compile 'org.scala-lang:scala-library:2.9.0'
 
-  compile 'org.eclipse.jetty:jetty-websocket:7.1.6.v20100715'
-  compile 'org.eclipse.jetty:jetty-webapp:7.1.6.v20100715'
+  compile 'org.eclipse.jetty:jetty-websocket:7.4.0.v20110414'
+  compile 'org.eclipse.jetty:jetty-webapp:7.4.0.v20110414'
 
   compile 'org.slf4j:slf4j-api:1.6.1'
   compile 'org.slf4j:slf4j-jdk14:1.6.1'
@@ -43,7 +43,7 @@ class AkkaPlugin implements Plugin<Project> {
 			      }
 			      project.copy {
 			        from 'src/main/resources'
-              into targetDir + 'conf'
+              into targetDir + 'config'
 			      }			
         }
 
@@ -63,10 +63,13 @@ class AkkaPlugin implements Plugin<Project> {
         }
 
         project.task([dependsOn: 'akkaBuild'],'akkaRun') << {
+		          akkaHome = project.buildDir.absolutePath + '/akka'
+				  println "LALA" + akkaHome
  				  project.javaexec {
 				      main = 'akka.kernel.Main'
 				      classpath = project.sourceSets.main.runtimeClasspath
-				      systemProperty 'akka.home', project.buildDir.absolutePath + '/akka/'
+					  systemProperty 'akka.home',akkaHome
+					  systemProperty 'akka.config',akkaHome + "/config/akka.conf"
 				  }			
         }
 
