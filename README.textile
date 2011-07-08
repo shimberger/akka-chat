@@ -4,6 +4,13 @@ This is just an experimental project which aims at creating an Akka/WebSocket ba
 chat server. I am just trying to learn some Scala/Akka and new HTML stuff. There
 is a lot to be desired in this project. Feel free to comment.
 
-h2. Running the server
+h2. Building & Running the server
 
-So far there is no packaging mechanism included. In theory you only have to setup sbt as described at http://code.google.com/p/simple-build-tool/wiki/Setup and then execute "sbt run" in the project root. You can visit the UI (well the "textarea") at localhost:9998/app/.
+So far there is no packaging mechanism included. 
+The build is realised via Gradle (http://www.gradle.org/).
+Just install Gradle and type:
+
+	gradle akkaRun
+	
+inside the project root. You can visit the UI (well the "textarea") at 
+http://localhost:9998/app/.
