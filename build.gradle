@@ -1,0 +1,75 @@
+apply plugin: 'scala'
+apply plugin: AkkaPlugin
+
+repositories {
+  mavenCentral()
+  mavenRepo name: "akka", urls: "http://akka.io/repository/"
+  mavenRepo name: "maven-multiverse", urls: "http://multiverse.googlecode.com/svn/maven-repository/releases/"
+  mavenRepo name: "guiceyfruit", urls: "http://guiceyfruit.googlecode.com/svn/repo/releases/"
+  mavenRepo name: "jboss", urls: "https://repository.jboss.org/nexus/content/groups/public/" 
+}
+
+dependencies {
+  scalaTools 'org.scala-lang:scala-compiler:2.9.0'
+  scalaTools 'org.scala-lang:scala-library:2.9.0'
+  compile 'org.scala-lang:scala-library:2.9.0'
+
+  compile 'org.eclipse.jetty:jetty-websocket:7.1.6.v20100715'
+  compile 'org.eclipse.jetty:jetty-webapp:7.1.6.v20100715'
+
+  compile 'org.slf4j:slf4j-api:1.6.1'
+  compile 'org.slf4j:slf4j-jdk14:1.6.1'
+  
+  compile 'se.scalablesolutions.akka:akka-http:1.1.3'
+  compile 'se.scalablesolutions.akka:akka-kernel:1.1.3'
+  compile('se.scalablesolutions.akka:akka-actor:1.1.3') {
+    transitive = true
+  }
+
+}
+
+
+class AkkaPlugin implements Plugin<Project> {
+    def void apply(Project project) {
+
+        project.task([dependsOn: 'jar'],'akkaBuild') << {
+		        targetDir = project.buildDir.absolutePath + '/akka/'
+		        deployPath = targetDir + 'deploy'
+		        libManaged = targetDir + 'lib'
+		        distPath = project.distsDir.absolutePath + '/akka/'
+			      project.copy {
+			        from project.jar.archivePath.absolutePath
+              into deployPath
+			      }
+			      project.copy {
+			        from 'src/main/resources'
+              into targetDir + 'conf'
+			      }			
+        }
+
+        project.task([dependsOn: 'akkaBuild'],'akkaDist') << {
+		        targetDir = project.buildDir.absolutePath + '/akka/'
+		        deployPath = targetDir + 'deploy'
+		        libManaged = targetDir + 'lib'
+		        distPath = project.distsDir.absolutePath + '/akka/'
+			      project.copy {
+			        from targetDir
+              into distPath
+			      }
+			      project.copy {
+			        from project.configurations.compile.copy().setTransitive(true)
+			        into distPath + 'lib'
+			      }
+        }
+
+        project.task([dependsOn: 'akkaBuild'],'akkaRun') << {
+ 				  project.javaexec {
+				      main = 'akka.kernel.Main'
+				      classpath = project.sourceSets.main.runtimeClasspath
+				      systemProperty 'akka.home', project.buildDir.absolutePath + '/akka/'
+				  }			
+        }
+
+
+    }
+}
