@@ -10,9 +10,15 @@ class Boot {
     SupervisorConfig(
       OneForOneStrategy(List(classOf[Exception]), 3, 100),
       Supervise(
+        actorOf[RootEndpoint],
+        Permanent) ::
+      Supervise(
         actorOf[ChatNexus],
         Permanent) ::        
-        // More actors goe here	
+	    Supervise(
+	      actorOf(new UploadService("/mist/upload")),
+	      Permanent) ::        
+        // More actors go here	
       Nil))
   factory.newInstance.start
 }

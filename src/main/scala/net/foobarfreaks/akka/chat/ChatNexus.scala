@@ -20,7 +20,7 @@ class ChatNexus extends Actor with WebSocketNexus with Logging {
 			}
 			case msg : ServerMessage => {
 				log.info("Received server message" + msg.data);
-				// We dont have to do anything so far
+				// We don't have to do anything so far
 			}
 			case msg : ClientMessage => {
 				log.info("Received client message" + msg.data);

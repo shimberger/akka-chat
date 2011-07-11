@@ -77,7 +77,16 @@
 								<Arg>/*</Arg>
 							</Call>
 						</New>
-					</Item>					
+					</Item>
+					<Item>
+						<New id="MistHandler" class="org.eclipse.jetty.servlet.ServletContextHandler">
+							<Set name="contextPath">/mist</Set>
+							<Call name="addServlet">
+								<Arg>akka.http.AkkaMistServlet</Arg>
+								<Arg>/*</Arg>
+							</Call>
+						</New>
+					</Item>										
 					<Item>
 						<New class="org.eclipse.jetty.server.handler.ContextHandler">
 							<Ref id="WebSocketHandler">

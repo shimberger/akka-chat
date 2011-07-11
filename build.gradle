@@ -1,5 +1,7 @@
 apply plugin: 'scala'
 apply plugin: AkkaPlugin
+apply plugin: 'idea'
+
 
 repositories {
   mavenCentral()
@@ -16,6 +18,10 @@ dependencies {
 
   compile 'org.eclipse.jetty:jetty-websocket:7.4.0.v20110414'
   compile 'org.eclipse.jetty:jetty-webapp:7.4.0.v20110414'
+
+  compile 'com.mongodb.casbah:casbah_2.9.0-1:2.1.5.0'
+
+  compile 'commons-fileupload:commons-fileupload:1.2.2'
 
   compile 'org.slf4j:slf4j-api:1.6.1'
   compile 'org.slf4j:slf4j-jdk14:1.6.1'
